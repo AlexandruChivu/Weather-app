@@ -8,7 +8,6 @@ import openmeteo_requests
 import requests_cache
 from retry_requests import retry
 
-
 def get_weather():
     city = search_textfield.get()
     geolocator = Nominatim(user_agent="geoapi Exercises")
