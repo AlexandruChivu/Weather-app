@@ -1,24 +1,21 @@
-
 from tkinter import *
-import tkinter as tk
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 from datetime import *
 import pytz
-import requests
 from PIL import Image, ImageTk
 import openmeteo_requests
 import requests_cache
 from retry_requests import retry
 
 
-def getWeather():
+def get_weather():
     city = search_textfield.get()
     geolocator = Nominatim(user_agent="geoapi Exercises")
     location = geolocator.geocode(city)
 
     obj = TimezoneFinder()
-    result = obj.timezone_at(lng = location.longitude, lat = location.latitude)
+    result = obj.timezone_at(lng=location.longitude, lat=location.latitude)
     result_content = result.split("/")
     continent = result_content[0]
     timezone.config(text=continent + f'/{city.capitalize()}')
@@ -60,8 +57,8 @@ def getWeather():
         96: 'Thunderstorm with rain', 99: 'Thunderstorm with hail'
     }
 
-    def weather_images(weather_code, x = None, y = None):
-        if weather_code in [0,1]:
+    def weather_images(weather_code, x=None, y=None):
+        if weather_code in [0, 1]:
             icon_file = 'Images/icons/sun.png'
             photo = ImageTk.PhotoImage(file=icon_file)
         elif weather_code == 2:
@@ -114,7 +111,6 @@ def getWeather():
 
         return photo
 
-
     # Current values. The order of variables needs to be the same as requested.
     current = response.Current()
     current_temperature = current.Variables(0).Value()
@@ -140,9 +136,7 @@ def getWeather():
     w.config(text=f"{int(current_wind_speed)} Km/h")
     d.config(text=weather_codes_interpretation[current_weather_code])
 
-
-
-    #firstcell
+    # firstcell
     photo1 = weather_images(int(current_weather_code))
     firstimage.config(image=photo1)
     firstimage.image = photo1
@@ -152,7 +146,7 @@ def getWeather():
 
     day1temp.config(text=f"Day / Night\n{temperature_day1}°C / {temperature_night1}°C")
 
-    #secondcell
+    # secondcell
     photo2 = weather_images(int(weather_codes[0][1]), x=50, y=50)
     secondimage.config(image=photo2)
     secondimage.image = photo2
@@ -162,7 +156,7 @@ def getWeather():
 
     day2temp.config(text=f"Day / Night\n{temperature_day2}°C / {temperature_night2}°C")
 
-    #thirdcell
+    # thirdcell
     photo3 = weather_images(int(weather_codes[0][2]), x=50, y=50)
     thirdimage.config(image=photo3)
     thirdimage.image = photo3
@@ -172,7 +166,7 @@ def getWeather():
 
     day3temp.config(text=f"Day / Night\n{temperature_day3}°C / {temperature_night3}°C")
 
-    #fourthcell
+    # fourthcell
     photo4 = weather_images(int(weather_codes[0][3]), x=50, y=50)
     fourthimage.config(image=photo4)
     fourthimage.image = photo4
@@ -182,7 +176,7 @@ def getWeather():
 
     day4temp.config(text=f"Day / Night\n{temperature_day4}°C / {temperature_night4}°C")
 
-    #fifthcell
+    # fifthcell
     photo5 = weather_images(int(weather_codes[0][4]), x=50, y=50)
     fifthimage.config(image=photo5)
     fifthimage.image = photo5
@@ -192,7 +186,7 @@ def getWeather():
 
     day5temp.config(text=f"Day / Night\n{temperature_day5}°C / {temperature_night5}°C")
 
-    #sixthcell
+    # sixthcell
     photo6 = weather_images(int(weather_codes[0][5]), x=50, y=50)
     sixthimage.config(image=photo6)
     sixthimage.image = photo6
@@ -202,7 +196,7 @@ def getWeather():
 
     day6temp.config(text=f"Day / Night\n{temperature_day6}°C / {temperature_night6}°C")
 
-    #seventhcell
+    # seventhcell
     photo7 = weather_images(int(weather_codes[0][6]), x=50, y=50)
     seventhimage.config(image=photo7)
     seventhimage.image = photo7
@@ -212,7 +206,7 @@ def getWeather():
 
     day7temp.config(text=f"Day / Night\n{temperature_day7}°C / {temperature_night7}°C")
 
-    #days
+    # days
     first = datetime.now()
     day1.config(text=first.strftime("%A"))
 
@@ -234,37 +228,38 @@ def getWeather():
     seventh = sixth + timedelta(days=1)
     day7.config(text=seventh.strftime('%A'))
 
+
 root = Tk()
 root.title("Weather App")
 root.geometry("890x470+300+300")
 root.configure(bg="#57adff")
 root.resizable(False, False)
 
-#Icon
+# Icon
 app_icon_file = PhotoImage(file="Images/logo.png")
-root.iconphoto(False,app_icon_file)
+root.iconphoto(False, app_icon_file)
 
 round_box_file = PhotoImage(file="Images/Rounded Rectangle 1.png")
 Label(root, image=round_box_file, bg="#57adff").place(x=30, y=110)
 
-#labels
+# labels
 
-label1 = Label(root,text= "Temperature", font=("Helvetica", 11), fg="White", bg="#213135")
+label1 = Label(root, text="Temperature", font=("Helvetica", 11), fg="White", bg="#213135")
 label1.place(x=50, y=115)
 
-label2 = Label(root,text= "Humidity", font=("Helvetica", 11), fg="White", bg="#213135")
+label2 = Label(root, text="Humidity", font=("Helvetica", 11), fg="White", bg="#213135")
 label2.place(x=50, y=135)
 
-label3 = Label(root,text= "Pressure", font=("Helvetica", 11), fg="White", bg="#213135")
+label3 = Label(root, text="Pressure", font=("Helvetica", 11), fg="White", bg="#213135")
 label3.place(x=50, y=155)
 
-label4 = Label(root,text= "Wind Speed", font=("Helvetica", 11), fg="White", bg="#213135")
+label4 = Label(root, text="Wind Speed", font=("Helvetica", 11), fg="White", bg="#213135")
 label4.place(x=50, y=175)
 
-label5 = Label(root,text= "Description", font=("Helvetica", 11), fg="White", bg="#213135")
+label5 = Label(root, text="Description", font=("Helvetica", 11), fg="White", bg="#213135")
 label5.place(x=50, y=195)
 
-#search_box
+# search_box
 
 search_background_file = PhotoImage(file="Images/Rounded Rectangle 3.png")
 search_background = Label(image=search_background_file, bg="#57adff")
@@ -275,21 +270,21 @@ search_white = Label(image=search_white_file, bg="#213135")
 search_white.place(x=377, y=117)
 
 search_weather_image_file = PhotoImage(file="Images/Layer7.png")
-search_weather_image = Label(root, image =search_weather_image_file, bg="#213135")
+search_weather_image = Label(root, image=search_weather_image_file, bg="#213135")
 search_weather_image.place(x=315, y=117)
 
-search_textfield = Entry(root, justify='center', width =24, font=("poppins", 18), bg="#ffffff", border=0, fg="black")
+search_textfield = Entry(root, justify='center', width=24, font=("poppins", 18), bg="#ffffff", border=0, fg="black")
 search_textfield.place(x=381, y=121)
 search_textfield.focus()
 
 search_icon_file = PhotoImage(file="Images/Layer6.png")
-search_icon_button = Button(image=search_icon_file, borderwidth=0, cursor='hand2', bg="#213135", command=getWeather)
+search_icon_button = Button(image=search_icon_file, borderwidth=0, cursor='hand2', bg="#213135", command=get_weather)
 search_icon_button.place(x=710, y=123)
 
 # Bind the <Return> key to the getWeather function
-root.bind('<Return>', lambda event=None: getWeather())
+root.bind('<Return>', lambda event=None: get_weather())
 
-#bottom boxes
+# bottom boxes
 
 frame = Frame(root, width=900, height=200, bg="#212120")
 frame.pack(side=BOTTOM)
@@ -305,39 +300,39 @@ Label(frame, image=secondbox_file, bg="#212120").place(x=585, y=30)
 Label(frame, image=secondbox_file, bg="#212120").place(x=685, y=30)
 Label(frame, image=secondbox_file, bg="#212120").place(x=785, y=30)
 
-#clock
+# clock
 clock = Label(root, font=("Helvetica", 30, 'bold'), fg='white', bg='#57adff')
 clock.place(x=30, y=20)
 
-#timezone
-timezone = Label(root, font=("Helvetica",20), fg='white', bg='#57adff')
+# timezone
+timezone = Label(root, font=("Helvetica", 20), fg='white', bg='#57adff')
 timezone.place(x=650, y=15)
 
-#longitude and latitude
-long_lat = Label(root, font=("Helvetica",20), fg='white', bg='#57adff')
+# longitude and latitude
+long_lat = Label(root, font=("Helvetica", 20), fg='white', bg='#57adff')
 long_lat.place(x=650, y=50)
 
-#temperature label
-t = Label(root, font=('Helvetica',11), fg="white", bg="#213135")
+# temperature label
+t = Label(root, font=('Helvetica', 11), fg="white", bg="#213135")
 t.place(x=150, y=115)
 
-#humidity label
-h = Label(root, font=('Helvetica',11), fg="white", bg="#213135")
+# humidity label
+h = Label(root, font=('Helvetica', 11), fg="white", bg="#213135")
 h.place(x=150, y=135)
 
-#pressure label
-p = Label(root, font=('Helvetica',11), fg="white", bg="#213135")
+# pressure label
+p = Label(root, font=('Helvetica', 11), fg="white", bg="#213135")
 p.place(x=150, y=155)
 
-#wind label
-w = Label(root, font=('Helvetica',11), fg="white", bg="#213135")
+# wind label
+w = Label(root, font=('Helvetica', 11), fg="white", bg="#213135")
 w.place(x=150, y=175)
 
-#description label
-d = Label(root, font=('Helvetica',11), fg="white", bg="#213135")
+# description label
+d = Label(root, font=('Helvetica', 11), fg="white", bg="#213135")
 d.place(x=150, y=195)
 
-#first cell
+# first cell
 firstframe = Frame(root, width=225, height=141, bg="#292b2b")
 firstframe.place(x=37, y=297)
 
@@ -350,7 +345,7 @@ firstimage.place(x=5, y=20)
 day1temp = Label(firstframe, bg='#292b2b', fg="#57adff", font="arial 15 bold")
 day1temp.place(x=115, y=60)
 
-#second cell
+# second cell
 secondframe = Frame(root, width=74, height=120, bg="#292b2b")
 secondframe.place(x=292, y=307)
 
@@ -363,7 +358,7 @@ secondimage.place(x=7, y=25)
 day2temp = Label(secondframe, bg='#292b2b', fg="#57adff", font="arial 9 bold")
 day2temp.place(x=2, y=80)
 
-#third cell
+# third cell
 thirdframe = Frame(root, width=74, height=120, bg="#292b2b")
 thirdframe.place(x=392, y=307)
 
@@ -376,7 +371,7 @@ thirdimage.place(x=7, y=25)
 day3temp = Label(thirdframe, bg='#292b2b', fg="#57adff", font="arial 9 bold")
 day3temp.place(x=2, y=80)
 
-#fourth cell
+# fourth cell
 fourthframe = Frame(root, width=74, height=120, bg="#292b2b")
 fourthframe.place(x=492, y=307)
 
@@ -389,7 +384,7 @@ fourthimage.place(x=7, y=25)
 day4temp = Label(fourthframe, bg='#292b2b', fg="#57adff", font="arial 9 bold")
 day4temp.place(x=2, y=80)
 
-#fifth cell
+# fifth cell
 fifthframe = Frame(root, width=74, height=120, bg="#292b2b")
 fifthframe.place(x=592, y=307)
 
@@ -402,7 +397,7 @@ fifthimage.place(x=7, y=25)
 day5temp = Label(fifthframe, bg='#292b2b', fg="#57adff", font="arial 9 bold")
 day5temp.place(x=2, y=80)
 
-#sixth cell
+# sixth cell
 sixthframe = Frame(root, width=74, height=120, bg="#292b2b")
 sixthframe.place(x=692, y=307)
 
@@ -415,7 +410,7 @@ sixthimage.place(x=7, y=25)
 day6temp = Label(sixthframe, bg='#292b2b', fg="#57adff", font="arial 9 bold")
 day6temp.place(x=2, y=80)
 
-#seventh cell
+# seventh cell
 seventhframe = Frame(root, width=74, height=120, bg="#292b2b")
 seventhframe.place(x=792, y=307)
 
